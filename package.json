@@ -1,0 +1,43 @@
+{
+  "name": "forkrefresh",
+  "version": "1.0.0",
+  "description": "Sync forks with original repositories",
+  "main": "index.js",
+  "scripts": {
+    "test": "node tests/cli.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexivkin/forkrefresh.git"
+  },
+  "keywords": [
+    "repository",
+    "line",
+    "count"
+  ],
+  "author": "Alex Ivkin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexivkin/forkrefresh/issues"
+  },
+  "homepage": "https://github.com/alexivkin/forkrefresh#readme",
+  "dependencies": {
+    "@octokit/rest": "^15.9.3",
+    "axios": "^0.18.0",
+    "bitbucket": "^1.0.3",
+    "btoa-lite": "^1.0.0",
+    "chalk": "^2.4.1",
+    "chokidar": "^2.0.4",
+    "clui": "^0.3.6",
+    "configstore": "^3.1.2",
+    "debug": "^3.1.0",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "extract-zip": "^1.6.7",
+    "figlet": "^1.2.0",
+    "inquirer": "^6.0.0",
+    "memorystore": "^1.6.0",
+    "minimist": "^1.2.0",
+    "tmp": "0.0.33"
+  }
+}

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha256-Md8eaeo67OiouuXAi8t/Xpd8t2+IaJezATVTWbZqSOw=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/main.css">
+    <title>Forkrefresh</title>
+    <meta name="description" content="Bring git forks in sync with the original repositories">
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark bg-dark box-shadow">
+      <a class="navbar-brand" href="/"><i class="fa fa-code-fork"></i>&nbsp;Forkrefresh</a>
+    </nav>
+
+    <div class="alert alert-danger" role="alert" style="display:none;"><span id="error-desc"></span> </div>
+
+    <header class="pt-5 text-center">
+      <div class="container">
+        <h1 class="display-4"><b>Forkrefresh</b></h1>
+        <h4>Bring git forks in sync with the original repositories</h4>
+      </div>
+    </header>
+
+    <main class="pt-5">
+      <div class="container" id="signin">
+        <div class="input-group justify-content-center">
+          <div class="input-group-btn">
+            <a role="button" class="btn btn-lg btn-dark" href="/gh/auth?scope=repo">
+              <span class="fa fa-github"></span>&nbsp;Sign in with GitHub
+            </a>
+          </div>
+        </div>
+        <br>
+          <div class="input-group justify-content-center">
+            <div class="input-group-btn">
+              <a role="button" class="btn btn-lg btn-dark disabled" href="/bb/auth?scope=repo">
+                <span class="fa fa-bitbucket"></span>&nbsp;Sign in with Bitbucket
+              </a>
+            </div>
+          </div>
+        <br>
+          <div class="input-group justify-content-center">
+            <div class="input-group-btn">
+              <a role="button" class="btn btn-lg btn-dark disabled" href="/gl/auth?scope=repo" >
+                <span class="fa fa-gitlab"></span>&nbsp;Sign in with Gitlab
+              </a>
+            </div>
+          </div>
+        </div>
+        <br>
+        <hr>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-2"><a class="text-dark" href="https://github.com/alexivkin/forkrefresh/blob/master/README.md">Documentation</a></div>
+            <div class="col-md-2"><a class="text-dark" href="https://github.com/alexivkin/forkrefresh">Source</a></div>
+            <div class="col-md-8 text-right">
+              <div class="text-muted">Created with &hearts;&nbsp;by&nbsp;<a class="text-dark" href="https://ivkin.net">Alex Ivkin</a>.</div>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha256-xaF9RpdtRxzwYMWg4ldJoyPWqyDPCRD0Cv7YEEe6Ie8=" crossorigin="anonymous"></script>
+
+    <script>
+    if(typeof(EventSource) !== "undefined") {
+      $('#error-desc').text("No support for SSE. Switch to a modern browser, and not Edge");
+      $('#alert').show();
+    }
+    </script>
+
+  </body>
+</html>
