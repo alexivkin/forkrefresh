@@ -63,7 +63,7 @@ $(function() {
     let status=[]
     if (data.ahead) {
       if (data.ahead == -1)
-        status.push('More than '+data.compare_window +' commits ahead or behind.')
+        status.push('More than '+data.compare_window +' commits ahead or behind')
       else
         status.push(data.ahead+' commits ahead')
     }
@@ -89,7 +89,7 @@ $(function() {
   function syncRepo(fork,branch,sha){
     // console.log(`Syncing ${fork} to ${sha}`)
     var eventSourceUrl = `${document.URL}/${fork}/${branch}/${sha}/sync`
-    $("#btn-"+$.escapeSelector(fork)).html('<i class="fa fa-circle-o-notch fa-spin"></i>').prop("disabled",true)
+    $("#btn-"+$.escapeSelector(fork)).html('<i class="fa fa-cog fa-spin"></i>').prop("disabled",true)
     // not really needed to do the sse here, a simple 'get' would have sufficed
     var source = new EventSource(eventSourceUrl);
     source.addEventListener('sync', function(e) {
