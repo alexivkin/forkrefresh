@@ -2,6 +2,16 @@
 
 Bring git forks in sync with the original repositories. This is a full stack app. It could be done as a client-only single page app, but handling the GitHub OAuth SPA flow and API pagination may get tricky on the client only.
 
+## Demo
+
+https://forkrefresh.herokuapp.com
+
+### Running as a docker container
+
+      docker run -it --rm -v forkrefresh:/root/.config/configstore -p 8080:8080 alexivkin/forkrefresh $*
+
+The first time it runs docker will download the latest pre-built image. You can then access the webapp via http://localhost:8080
+
 ## Running natively
 
 1. Install NodeJS 10.5+

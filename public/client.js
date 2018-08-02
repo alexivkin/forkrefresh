@@ -62,7 +62,7 @@ $(function() {
     }
     let status=[]
     if (data.ahead) {
-      if (data.ahead == -1)
+      if (data.ahead == -1)  // indeterminate (changes lie beyond compare_window)
         status.push('More than '+data.compare_window +' commits ahead or behind')
       else
         status.push(data.ahead+' commits ahead')
@@ -76,10 +76,22 @@ $(function() {
     status.push(`than <a class="text-dark bold" href="https://github.com/${data.source.owner}/${data.source.name}">${data.source.owner}/${data.source.name}</a> (${data.source.default_branch})`)
     $('#results-'+$.escapeSelector(data.name)).html(status.join(', '))
     if (data.ahead) {
+      // $("#btn-"+$.escapeSelector(data.name)).html('<i class="fa fa-exclamation"></i>').prop("disabled",false)
+      //     .removeAttr("data-sync").attr('data-toggle','tooltip').attr('data-placement','top').attr('title','Refusing to overwrite the fork')
+      //     .click(()=>{ window.open('https://github.com/'+user+'/'+data.name,'_blank')})
+          // $('[data-toggle="tooltip"]').tooltip() // a bit general, we could narrow it to just this result
+      var popover = `<div class="row">
+                  <div class="col-md-6 pr-0"><a class="btn btn-outline-info btn-sm" href="https://github.com/${user}/${data.name}/compare" target="_blank">See changes</a></div>
+                  <div class="col-md-6 pl-0"><button id="fff-${data.name}/${data.default_branch}/${data.source.sha}" class="btn btn-outline-danger btn-sm">Discard changes</button></div>
+                  </div>`
       $("#btn-"+$.escapeSelector(data.name)).html('<i class="fa fa-exclamation"></i>').prop("disabled",false)
-          .removeAttr("data-sync").attr('data-toggle','tooltip').attr('data-placement','top').attr('title','Refusing to overwrite the fork')
-          .click(()=>{ window.open('https://github.com/'+user+'/'+data.name,'_blank')})
-          $('[data-toggle="tooltip"]').tooltip() // a bit general, we could narrow it to just this result
+              .removeAttr("data-sync").attr('data-toggle','popover').popover({placement: 'top', animation:true, content:popover, html:true})
+              .on('shown.bs.popover',() => {
+                  $("#fff-"+$.escapeSelector(`${data.name}/${data.default_branch}/${data.source.sha}`)).click(function cliker(event) {
+                    syncRepo(event.target.id.substr(4).split('/')[0],event.target.id.substr(4).split('/')[1],event.target.id.substr(4).split('/')[2])
+                    $("#btn-"+$.escapeSelector(data.name)).popover("hide")
+                  })
+              })
     } else {
       $("#btn-"+$.escapeSelector(data.name)).html('<i class="fa fa-fast-forward"></i>').prop("disabled",false)
       $('#chk-'+$.escapeSelector(data.name)).prop("disabled",false).prop('checked',true);

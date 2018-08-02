@@ -156,7 +156,7 @@ module.exports = {
             p = engine.getRepo(r.owner.login,r.name).then(async res => {
               try {
                 // get the basics goign
-                let ret={name:res.data.name,updated_at:res.data.updated_at,fork:true}
+                let ret={name:res.data.name,updated_at:res.data.updated_at,fork:true,default_branch:res.data.default_branch}
                 // now grab commits for the main
                 // debug(res.data.owner.login,res.data.name)
 
@@ -197,7 +197,7 @@ module.exports = {
                   ret.ahead =-1
                 //https://octokit.github.io/rest.js/#api-Gitdata-updateReference
                 // const result = await octokit.gitdata.updateReference({owner, repo, ref, sha, force})
-                ret.source={     // send just data, view will render it
+                ret.source={     // send just the data, the view will render it
                   owner:res.data.parent.owner.login,
                   name:res.data.parent.name,
                   default_branch:res.data.parent.default_branch,

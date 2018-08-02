@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker run -it --rm -v cxloc:/root/.config/configstore cxai/cxloc $*
+docker run -it --rm --name forkrefresh -v forkrefresh:/root/.config/configstore -p 8080:8080 alexivkin/forkrefresh $*
