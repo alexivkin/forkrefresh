@@ -1,6 +1,8 @@
 # Forkrefresh
 
-Bring git forks in sync with the original repositories. This is a full stack app. It could be done as a client-only single page app, but handling the GitHub OAuth SPA flow and API pagination may get tricky on the client only.
+Bring Git forks up to date with the original source repositories without downloading/cloning anything to your local environment.
+
+Uses only the Github/Bitbucket API calls to sync.
 
 ## Demo
 
@@ -12,7 +14,7 @@ https://forkrefresh.herokuapp.com
 
 The first time it runs docker will download the latest pre-built image. You can then access the webapp via http://localhost:8080
 
-## Running natively
+### Running natively
 
 1. Install NodeJS 10.5+
 2. Clone this repository
@@ -30,6 +32,7 @@ Authentication details are saved in the configstore, so you only need to do it o
 
 ## Notes
 * MS Edge is not supported until it gains SSE
+* This is a full stack app. It could be done as a client-only single page app, but handling the GitHub OAuth SPA flow and API pagination would be tricky.
 * Tested against [GitHub API v3](https://developer.github.com/v3/)
 
 ## References
