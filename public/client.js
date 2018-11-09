@@ -42,7 +42,7 @@ $(function() {
       $("button[data-sync]").click(event => {
           if (event.target.id == 'sync-all'){
             $("input:checkbox[name=repomark]:checked").each((i,v)=>{
-              syncRepo(v.id.substr(4),v.data("source-sha"))
+              syncRepo(v.id.substr(4),$('#btn-'+v.id.substr(4)).data("branch"),$('#btn-'+v.id.substr(4)).data("source-sha"))
             })
           } else if (event.target.id.indexOf('btn-')==0){
               syncRepo(event.target.id.substr(4),event.target.getAttribute("data-branch"),event.target.getAttribute("data-source-sha"))
