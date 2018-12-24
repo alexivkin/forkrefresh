@@ -54,7 +54,7 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 
-app.use(allowCrossDomain)
+//app.use(allowCrossDomain)
 
 // app/index.js is the actual router
 app.use(function (req, res, next) {
