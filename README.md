@@ -10,7 +10,7 @@ https://forkrefresh.herokuapp.com
 
 ### Running as a docker container
 
-      docker run -it --rm -v forkrefresh:/root/.config/configstore -p 8080:8080 alexivkin/forkrefresh $*
+      docker run -it --rm -v forkrefresh:/root/.config/configstore -p 8080:8080 alexivkin/forkrefresh
 
 The first time it runs docker will download the latest pre-built image. You can then access the webapp via http://localhost:8080
 
@@ -19,7 +19,7 @@ The first time it runs docker will download the latest pre-built image. You can 
 1. Install NodeJS 10.5+
 2. Clone this repository
 3. Run `npm install`
-4. Register the app with the OAuth provider (see "configuring authentication")
+4. Register the app with the OAuth provider (see the "configuring authentication" section below)
 5. Now run it as `node server.js`
 
 ## Configuring authentication
