@@ -31,9 +31,10 @@ It uses the full flow OAuth2. You will need to register your app on the server a
 Authentication details are saved in the configstore, so you only need to do it once. To reset authentication simply remove `.config/configstore`.
 
 ## Notes
-* MS Edge is not supported until it gains SSE
-* This is a full stack app. It could be done as a client-only single page app, but handling the GitHub OAuth SPA flow and API pagination would be tricky.
+
+* This is a full stack app (server and client js). It could be done as a client-only single page app, but handling the GitHub OAuth SPA flow and API pagination would be tricky.
 * Tested against [GitHub API v3](https://developer.github.com/v3/)
 
 ## References
+
 * [Similar app as SPA](https://github.com/upriver/upriver.github.io) and its [GitHub login proxy](https://github.com/prose/gatekeeper)

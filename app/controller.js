@@ -65,15 +65,21 @@ module.exports = {
           client_id: creds.id,
           client_secret: creds.secret,
           code: req.query.code
-        }, { headers: { Accept: 'application/json' } }).then((rr) => {
+        }, { headers: { Accept: 'application/json' } }).then(rr => {
           // debug(rr)
           if (rr.data.error){
             res.send('OAuth2 error: '+rr.data.error_description)
             return
           }
-          ok.authenticate({ type : 'oauth', token : rr.data.access_token });  // does nothing but sets internal state
-          ok.users.get({}).then(result => {
-            // debug(result)
+          // inject auth
+          ok.hook.wrap("request",(f, request)=>{
+    			request.headers.authorization = `bearer ${rr.data.access_token}`;
+    			return f(request);
+    		})
+
+          //ok.auth({ type:'token',tokenType:'oauth',token: rr.data.access_token }).then(ress=>{
+          ok.users.getAuthenticated().then(result => {
+            debug(result)
             req.session.authed=true
             req.session.engine="gh"
             req.session.user=result.data.login
@@ -83,7 +89,11 @@ module.exports = {
             res.redirect('/gh/'+req.session.user)
           }).catch(err => {
             res.send('OAuth fine, but no cigar on the user: '+err)
+            debug(err.stack)
           })
+          //}).catch(err => {
+          //  res.send('OAuth errored out: '+err)
+          //})
         }).catch(err => {
           res.send('Cant get the OAuth code: '+err)
         })
@@ -141,6 +151,7 @@ module.exports = {
     let engine= req.params.eng == 'gh' ? gh : bb
     // first push the repos, then push the repo status
     engine.getRepos().then(async repos => {
+      debug("in")
       try {
         // send the repos
         socket.emit("repos", repos)
@@ -226,7 +237,7 @@ module.exports = {
       }
     }).catch (err => {
         socket.emit("repos", "Nope: "+JSON.stringify(err))
-      })
+    })
     // next()
     // res.sendStatus(200)
   },
@@ -250,8 +261,8 @@ module.exports = {
   },
 
   SignOut: (req, res) => {
-    ok.authenticate({ type : 'oauth', token : "0" }); // invalidate the header
-    bi.authenticate({ type : 'oauth', token : "0" }); // invalidate the header
+    //ok.authenticate({ type : 'oauth', token : "0" }); // invalidate the header
+    //bi.authenticate({ type : 'oauth', token : "0" }); // invalidate the header
     req.session.destroy() // ()=>{}
     res.redirect(req.baseUrl + '/')
   }

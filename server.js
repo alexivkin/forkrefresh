@@ -67,3 +67,15 @@ const server=app.listen(port, () => {
     (err.code == 'EADDRINUSE')?console.log("\n"+chalk.red(`Port ${port} is in use`)):console.log("\n"+chalk.red(`Network error: ${err}`))
     process.exit(1)
   })
+
+// handlers for the docker pid 1 ctrl-c correctly
+process.on('SIGINT', terminator)
+process.on('SIGHUP', terminator)
+process.on('SIGTERM', terminator)
+
+function terminator(signal) {
+  debug(`Stopping on ${signal}`);
+  server.close(()=>{
+    process.exit(128)
+  })
+}
