@@ -5,6 +5,7 @@ const gh  = require('../lib/github');
 const bb  = require('../lib/bitbucket');
 const path = require('path')
 
+const handlebars = require('handlebars')
 const btoa = require('btoa-lite')
 const qs = require('querystring');
 const axios = require('axios')
@@ -16,7 +17,7 @@ const extract = require('extract-zip')
 
 const debug = require('debug')('controller')
 
-// var qs = require('querystring');  qs.stringify( qs.parse
+const pjson = require('../package.json'); // for the package version
 
 const conf = new configstore(pkg.name);
 const ok = gh.getInstance();
@@ -29,7 +30,9 @@ module.exports = {
       res.redirect(`/${req.session.engine}/${req.session.user}`)
     else
       // if not just load index
-      res.sendFile(path.resolve(__dirname + '/../public/index.html'));
+      var template = handlebars.compile(fs.readFileSync(__dirname + '/../public/index.html',"utf8"));
+      var local = template({version:'v'+pjson.version})
+      res.send(local)
   },
 
   // OAuth authentication

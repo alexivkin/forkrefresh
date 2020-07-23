@@ -6,7 +6,7 @@ Uses only the Github/Bitbucket API calls to sync.
 
 ## Demo
 
-https://forkrefresh.herokuapp.com
+[Try it live](https://forkrefresh.herokuapp.com)
 
 ### Running as a docker container
 

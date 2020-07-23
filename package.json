@@ -1,6 +1,6 @@
 {
   "name": "forkrefresh",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Sync forks with original repositories",
   "main": "index.js",
   "scripts": {
@@ -35,6 +35,7 @@
     "express-session": "^1.17.1",
     "extract-zip": "^2.0.1",
     "figlet": "^1.5.0",
+    "handlebars": "^4.7.6",
     "inquirer": "^7.3.2",
     "memorystore": "^1.6.2",
     "minimist": "^1.2.5",
