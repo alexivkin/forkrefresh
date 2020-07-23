@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/alexivkin/forkrefresh#readme",
   "dependencies": {
-    "@octokit/auth-oauth-app": "^3.0.5",
     "@octokit/rest": "^18.0.1",
     "axios": "^0.19.2",
     "bitbucket": "^2.4.1",
