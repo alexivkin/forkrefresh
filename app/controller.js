@@ -16,23 +16,22 @@ const extract = require('extract-zip')
 // const streams = require('memory-streams');
 
 const debug = require('debug')('controller')
-
 const pjson = require('../package.json'); // for the package version
 
 const conf = new configstore(pkg.name);
-const ok = gh.getInstance();
-const bi = bb.getInstance();
+let bi = bb.getInstance(); // this aint gonna work anymore
 
 module.exports = {
   Root: (req, res) => {
     // if already logged in send to the appropriate repo list
     if (req.session.authed)
       res.redirect(`/${req.session.engine}/${req.session.user}`)
-    else
+    else {
       // if not just load index
       var template = handlebars.compile(fs.readFileSync(__dirname + '/../public/index.html',"utf8"));
       var local = template({version:'v'+pjson.version})
       res.send(local)
+    }
   },
 
   // OAuth authentication
@@ -68,93 +67,106 @@ module.exports = {
           client_id: creds.id,
           client_secret: creds.secret,
           code: req.query.code
-        }, { headers: { Accept: 'application/json' } }).then(rr => {
-          // debug(rr)
-          if (rr.data.error){
-            res.send('OAuth2 error: '+rr.data.error_description)
-            return
-          }
-          // inject auth
-          ok.hook.wrap("request",(f, request)=>{
-    			request.headers.authorization = `bearer ${rr.data.access_token}`;
-    			return f(request);
-    		})
-
-          //ok.auth({ type:'token',tokenType:'oauth',token: rr.data.access_token }).then(ress=>{
-          ok.users.getAuthenticated().then(result => {
-            debug(result)
-            req.session.authed=true
-            req.session.engine="gh"
-            req.session.user=result.data.login
-            req.session.access_token=rr.data.access_token
-            req.session.repostats={} // init
-            // also have data.scope and data.token_type
-            res.redirect('/gh/'+req.session.user)
-          }).catch(err => {
-            res.send('OAuth fine, but no cigar on the user: '+err)
-            debug(err.stack)
-          })
-          //}).catch(err => {
-          //  res.send('OAuth errored out: '+err)
-          //})
-        }).catch(err => {
-          res.send('Cant get the OAuth code: '+err)
-        })
-      } else {
-        // https://developer.atlassian.com/cloud/bitbucket/oauth-2/
-        axios.post('https://bitbucket.org/site/oauth2/access_token',qs.stringify({
-          grant_type: 'authorization_code',
-          code: req.query.code
-        }), { headers: {
-          Authorization: 'Basic '+btoa(`${creds.id}:${creds.secret}`),
-          Accept: 'application/json' }
-         }).then((rr) => {
-           // debug(rr)
-           if (rr.data.error){
-             res.send('OAuth2 error: '+rr.data.error_description)
-             return
-           }
-           bi.authenticate({ type : 'oauth', token : rr.data.access_token });  // does nothing but sets internal state
-           axios.get('https://api.bitbucket.org/2.0/user', { headers: { Authorization: `Bearer ${rr.data.access_token}` } })
-           .then(result => {
-               // debug(result)
-               req.session.authed=true
-               req.session.engine="bb"
-               req.session.user=result.data.username
-               req.session.access_token=rr.data.access_token // 1hr lifetime
-               // https://developer.atlassian.com/cloud/bitbucket/oauth-2/
-               req.session.refresh_token=rr.data.refresh_token // this thing can be exchanged for another access token if it expires
-               req.session.repostats={} // init
-               // also come data.scopes, data.expires_in, data.token_type
-               bb.creds.username = result.data.username
-
-               res.redirect('/bb/'+req.session.user)
-             }).catch(err => {
-               res.send('OAuth fine, but no cigar on the user: '+err+", "+err.response)
-             })
+          }, { headers: { Accept: 'application/json' } }).then(rr => {
+            // debug(rr)
+            if (rr.data.error){
+              res.send('OAuth2 error: '+rr.data.error_description)
+              return
+            }
+            let ok = new gh.Github();
+            // inject auth
+            ok.octokit.hook.wrap("request",(f, request)=>{
+              request.headers.authorization = `bearer ${rr.data.access_token}`;
+              return f(request);
+            })
+            // debug(ok)
+            //ok.auth({ type:'token',tokenType:'oauth',token: rr.data.access_token }).then(ress=>{
+            ok.octokit.users.getAuthenticated().then(authres => {
+              // debug(authres)
+              req.session.authed=true
+              req.session.engine="gh"
+              req.session.user=authres.data.login
+              req.session.access_token=rr.data.access_token 
+              // req.session.random=Math.floor(Math.random() * Math.floor(1000))
+              req.session.repostats={} // init
+              // also have data.scope and data.token_type
+              res.redirect('/gh/'+req.session.user)
             }).catch(err => {
-             res.send('Cant get the OAuth code: '+err)
-           })
-         }
+              res.send('OAuth fine, but no cigar on the user: '+err)
+              debug(err.stack)
+            })
+          }).catch(err => {
+            res.send('Cant get the OAuth code: '+err)
+      })
     } else {
-      debug('OAuth2 is not configured. Set it in '+conf.path)
-      res.send('OAuth2 is not configured. Set it in '+conf.path)
-    }
+      // https://developer.atlassian.com/cloud/bitbucket/oauth-2/
+      axios.post('https://bitbucket.org/site/oauth2/access_token',qs.stringify({
+      grant_type: 'authorization_code',
+      code: req.query.code
+    }), { headers: {
+      Authorization: 'Basic '+btoa(`${creds.id}:${creds.secret}`),
+      Accept: 'application/json' }
+    }).then((rr) => {
+      // debug(rr)
+      if (rr.data.error){
+        res.send('OAuth2 error: '+rr.data.error_description)
+        return
+      }
+      bi.authenticate({ type : 'oauth', token : rr.data.access_token });  // does nothing but sets internal state
+      axios.get('https://api.bitbucket.org/2.0/user', { headers: { Authorization: `Bearer ${rr.data.access_token}` } })
+      .then(result => {
+        // debug(result)
+        req.session.authed=true
+        req.session.engine="bb"
+        req.session.user=result.data.username
+        req.session.access_token=rr.data.access_token // 1hr lifetime
+        // https://developer.atlassian.com/cloud/bitbucket/oauth-2/
+        req.session.refresh_token=rr.data.refresh_token // this thing can be exchanged for another access token if it expires
+        req.session.repostats={} // init
+        // also come data.scopes, data.expires_in, data.token_type
+        bb.creds.username = result.data.username
+        
+        res.redirect('/bb/'+req.session.user)
+      }).catch(err => {
+        res.send('OAuth fine, but no cigar on the user: '+err+", "+err.response)
+      })
+    }).catch(err => {
+      res.send('Cant get the OAuth code: '+err)
+    })
+  }
+  } else {
+    debug('OAuth2 is not configured. Set it in '+conf.path)
+    res.send('OAuth2 is not configured. Set it in '+conf.path)
+  }
   },
 
   Main: (req , res) => {
-    if (!req.session.authed){
+    if (!req.session.authed || req.params.user != req.session.user){
       res.redirect(req.baseUrl + '/')
-    } else
+    } else 
       res.sendFile(path.resolve(__dirname + '/../public/repos.html'));
   },
 
   GetRepos: (req, res, next) => {
+    if (!req.session.authed) {
+      res.redirect(req.baseUrl + '/')
+      return
+    }
     var socket = new sse(req, res);
-    let engine= req.params.eng == 'gh' ? gh : bb
+    let engine
+    if (req.params.eng == 'gh') {
+      engine = new gh.Github();
+      // inject auth
+      engine.octokit.hook.wrap("request",(f, request)=>{
+        request.headers.authorization = `bearer ${req.session.access_token}`;
+        return f(request);
+      })
+    } else {
+      engine=bb //broken
+    }
+
     // first push the repos, then push the repo status
     engine.getRepos().then(async repos => {
-      debug("in")
       try {
         // send the repos
         socket.emit("repos", repos)
@@ -250,9 +262,23 @@ module.exports = {
   },
 
   SyncRepo: async (req, res, next) => {
-    // no real need  to do this over sockets
+    if (!req.session.authed) {
+      res.redirect(req.baseUrl + '/')
+      return
+    }
+    let engine
+    if (req.params.eng == 'gh') {
+      engine = new gh.Github();
+      // inject auth
+      engine.octokit.hook.wrap("request",(f, request)=>{
+        request.headers.authorization = `bearer ${req.session.access_token}`;
+        return f(request);
+      })
+    } else {
+      engine=bb //broken
+    }
+    // no real need  to do this over sockets... but why not
     var socket = new sse(req, res);
-    let engine= req.params.eng == 'gh' ? gh : bb
     debug(`Sync requested for ${req.params.user}/${req.params.repo}/${req.params.branch} to ${req.params.sha}`)
     try {
       await engine.fastForward(req.params.user,req.params.repo,req.params.branch,req.params.sha)

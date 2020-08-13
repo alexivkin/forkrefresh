@@ -20,9 +20,9 @@ if (process.env.BB_OAUTH2_ID && process.env.BB_OAUTH2_SECRET) // for heroku depl
 
 app.use(session({
     store: new MemoryStore({ checkPeriod: 86400000 }),// prune expired entries every 24h
+    cookie: { maxAge: 86400000 },
     secret: process.env.SESSION_SECRET || 'somenotsosecretkey',
-    // todo: secure cookie for production https://www.npmjs.com/package/express-session#compatible-session-stores
-    resave: true, // might actually need false.
+    resave: true,
     saveUninitialized: true
 }))
 

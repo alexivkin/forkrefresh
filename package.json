@@ -22,12 +22,12 @@
   },
   "homepage": "https://github.com/alexivkin/forkrefresh#readme",
   "dependencies": {
-    "@octokit/rest": "^18.0.1",
+    "@octokit/rest": "^18.0.3",
     "axios": "^0.19.2",
     "bitbucket": "^2.4.1",
     "btoa-lite": "^1.0.0",
     "chalk": "^4.1.0",
-    "chokidar": "^3.4.1",
+    "chokidar": "^3.4.2",
     "clui": "^0.3.6",
     "configstore": "^5.0.1",
     "debug": "^4.1.1",
@@ -36,9 +36,11 @@
     "extract-zip": "^2.0.1",
     "figlet": "^1.5.0",
     "handlebars": "^4.7.6",
-    "inquirer": "^7.3.2",
+    "inquirer": "^7.3.3",
+    "jquery": "^3.5.1",
     "memorystore": "^1.6.2",
     "minimist": "^1.2.5",
+    "popper.js": "^1.16.1",
     "tmp": "0.2.1"
   }
 }
