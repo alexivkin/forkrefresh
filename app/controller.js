@@ -1,19 +1,16 @@
 const pkg         = require('../package.json');
 const configstore = require('configstore');
-const sse = require('../lib/ssesocket')
-const gh  = require('../lib/github');
-const bb  = require('../lib/bitbucket');
-const path = require('path')
+const handlebars  = require('handlebars')
+const sse   = require('../lib/ssesocket')
+const gh    = require('../lib/github');
+const bb    = require('../lib/bitbucket');
+const path  = require('path')
 
-const handlebars = require('handlebars')
-const btoa = require('btoa-lite')
-const qs = require('querystring');
+const btoa  = require('btoa-lite')
+const qs    = require('querystring');
 const axios = require('axios')
-const fs = require("fs");
-const util = require('../lib/util');
-const tmp         = require('tmp');
-const extract = require('extract-zip')
-// const streams = require('memory-streams');
+const fs    = require("fs");
+const util  = require('../lib/util');
 
 const debug = require('debug')('controller')
 const pjson = require('../package.json'); // for the package version
@@ -86,7 +83,7 @@ module.exports = {
               req.session.authed=true
               req.session.engine="gh"
               req.session.user=authres.data.login
-              req.session.access_token=rr.data.access_token 
+              req.session.access_token=rr.data.access_token
               // req.session.random=Math.floor(Math.random() * Math.floor(1000))
               req.session.repostats={} // init
               // also have data.scope and data.token_type
@@ -125,7 +122,7 @@ module.exports = {
         req.session.repostats={} // init
         // also come data.scopes, data.expires_in, data.token_type
         bb.creds.username = result.data.username
-        
+
         res.redirect('/bb/'+req.session.user)
       }).catch(err => {
         res.send('OAuth fine, but no cigar on the user: '+err+", "+err.response)
@@ -143,7 +140,7 @@ module.exports = {
   Main: (req , res) => {
     if (!req.session.authed || req.params.user != req.session.user){
       res.redirect(req.baseUrl + '/')
-    } else 
+    } else
       res.sendFile(path.resolve(__dirname + '/../public/repos.html'));
   },
 

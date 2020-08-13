@@ -34,6 +34,8 @@ Authentication details are saved in the configstore, so you only need to do it o
 
 * This is a full stack app (server and client js). It could be done as a client-only single page app, but handling the GitHub OAuth SPA flow and API pagination would be tricky.
 * Tested against [GitHub API v3](https://developer.github.com/v3/)
+* This code is full of hacks to bring the origial GH API v14 implementation to v18. It's neither pretty nor the best designed.
+* Bitbucket and the CLI parts have been falling by the wayside and no longer working.
 
 ## References
 
