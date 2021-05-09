@@ -35,7 +35,7 @@
     "express-session": "^1.17.1",
     "extract-zip": "^2.0.1",
     "figlet": "^1.5.0",
-    "handlebars": "^4.7.6",
+    "handlebars": "^4.7.7",
     "inquirer": "^7.3.3",
     "jquery": "^3.5.1",
     "memorystore": "^1.6.2",
