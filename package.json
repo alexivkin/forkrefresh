@@ -23,7 +23,7 @@
   "homepage": "https://github.com/alexivkin/forkrefresh#readme",
   "dependencies": {
     "@octokit/rest": "^18.0.3",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bitbucket": "^2.4.1",
     "btoa-lite": "^1.0.0",
     "chalk": "^4.1.0",
