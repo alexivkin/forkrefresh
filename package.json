@@ -39,7 +39,7 @@
     "inquirer": "^7.3.3",
     "jquery": "^3.5.1",
     "memorystore": "^1.6.2",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "popper.js": "^1.16.1",
     "tmp": "0.2.1"
   }
